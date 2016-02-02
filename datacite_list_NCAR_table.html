@@ -13,6 +13,8 @@
   
   <!-- DataTable plugin for jQuery -->
   <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.10.10/js/dataTables.filter.html.js"></script>
+
   
 
 </head>
@@ -29,7 +31,7 @@ Query: https://search.datacite.org/api?q=*&fq=prefix:10.5065&wt=json&indent=true
 -->	
 
     <div id="numFound">
-	Number found: 
+	Number of assets found: 
 	</div>
  
    <br>
@@ -69,6 +71,7 @@ $(document).ready(function() {
       		
       		
          $('#example').DataTable({
+            serverSide: false,
             paging: false,
             searching: true,
          	data : doclist,
@@ -87,21 +90,14 @@ $(document).ready(function() {
          	    defaultContent: "<i>Not set</i>"}
          	],
          	columnDefs : [
-         	{ targets: [0],
-         	  searchable: true
-         	},
+         	 { type: "string", targets: [0,2,3]},
          	{
          	   targets: 1,
          	   render: function(data, type, row) {
          	      return '<a href=http://dx.doi.org/' + data + '>' + data + '</a>';
          		}
-         	},
-         	{ targets: [2],
-         	  searchable: true
-         	},
-         	{ targets: [3],
-         	  searchable: true
          	}
+         	
          	]
          
          });
