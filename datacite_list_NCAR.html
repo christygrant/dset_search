@@ -44,7 +44,7 @@
 
 $(document).ready(function() {
     $.ajax({
-        url: "https://search.datacite.org/api?q=*&fq=prefix:10.5065&wt=json&indent=true&fl=doi,title,description,publicationYear,contributor&rows=1000",
+        url: "https://search.datacite.org/api?q=*&fq=prefix:10.5065&wt=json&indent=true&fl=doi,title,description,publicationYear,contributor&rows=5001",
         type: "get",
         dataType: "json"
     }).then(function(data) {
