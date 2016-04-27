@@ -46,26 +46,33 @@
 
 <div id="titleblock" > 
 <h1>NCAR Datacite Data Assets</h1>
-<h3>Prototype version</h3>
+<h3>Prototype Version</h3>
 </div>
 
-  <div class="panel panel-default">Note: This is a prototype version and provides access to a limited subset of data.<br>
-  Please <a href='https://jira.ucar.edu/secure/RapidBoard.jspa?rapidView=52&projectKey=DSET&view=planning.nodetail&quickFilter=118'>provide feedback using Jira</a>. 
-  </div>
+<div class="panel panel-warning">
+            <div class="panel-heading">
+              <h3 class="panel-title">Note: This is a prototype version and provides access to a limited subset of data.</h3>
+            </div>
+            <div class="panel-body">
+              <h5 class="media-heading">Please <a href='https://jira.ucar.edu/secure/RapidBoard.jspa?rapidView=52&projectKey=DSET&view=planning.nodetail&quickFilter=118'>provide feedback using Jira</a>.</h5>
+            </div>
+          </div>
 
-	<div id="datablock" style="background-color:white";>
-		<div>Search using Ctrl-F or Cmd-F</div>
+	<div id="datablock">
+	   <div class="well">
+	    <small>Loading the results may take a few seconds.</small>
+		<h5>Search using Ctrl-F or Cmd-F</h5>
 		<br>
 		
 		<div id="numFound">
-		  Number of assets found: 
+		   <strong>Number of assets found: </strong>
 		</div>
-		<br>
- 
-   		 <!-- Populated by jQuery loop -->
-   		 <div id="display">
+	  </div>	
+		
+   		<!-- Populated by jQuery loop -->
+   		<div id="display">
 	 
-		</div> 
+	  </div> 
 	</div> <!--datablock -->	
   
 </main>
