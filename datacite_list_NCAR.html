@@ -1,23 +1,69 @@
 <!DOCTYPE html>
 <html>
 <head>
+ <meta charset="utf-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Datacite NCAR query</title>
   
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+ 
+   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> 
+   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   
-  <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-
-  <!-- Latest compiled JavaScript -->
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+      
+    <!-- <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" /> -->
+    <!-- NCAR Theme -->
+    <link href="assets/css/fonts.css" rel="stylesheet" />
+    <link href="assets/css/custom.css" type="text/css" media="screen" rel="stylesheet">
+      
+     <!-- <script src="assets/bootstrap/js/bootstrap.min.js"></script> -->
+       <!-- Bootstrap core CSS -->
+   
+    <!-- Bootstrap theme -->
+    <!--<link href="assets/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">-->
+    
 
 </head>
 <body>
 
-<div class="container"> 
+<header id="header-wrap" class="hidden-xs">
+    <div class="container">
+        <div id="header" class="row">
+        
+         	<div id="logo-floater">
+                  <a href="/" title="Home" rel="home" id="logo">
+                  <img src="https://ncar.ucar.edu/sites/default/files/ncar_header.png" alt="Home">
+                  </a>
+               </div>
+        
+          
+        </div>
+    </div>
+</header>
 
+<!--
+<div  style="background-color: #24487d";>
+
+            <div class="section clearfix align-center-wrapper">
+               <div id="header-sub-nav"></div>
+               <div id="logo-floater">
+                  <a href="/" title="Home" rel="home" id="logo">
+                  <img src="https://ncar.ucar.edu/sites/default/files/ncar_header.png" alt="Home">
+                  </a>
+               </div>
+               </div>        
+           </div>
+
+</div>
+--> 
+
+<main class="container">
+
+<div id="titleblock" > 
 <h1>NCAR Datacite Data Assets</h1>
 <h3>Prototype version</h3>
+</div>
  <!-- Query: https://search.datacite.org/api?q=*&fq=prefix:10.5065<br>
   Query: https://search.datacite.org/api?q=*&fq=prefix:10.5065&wt=json&indent=true&fl=doi,title,created,updated,title,description,publicationYear,contributor&rows=3000 <br>
   -->
@@ -25,26 +71,53 @@
   Please <a href='https://jira.ucar.edu/secure/RapidBoard.jspa?rapidView=52&projectKey=DSET&view=planning.nodetail&quickFilter=118'>provide feedback using Jira</a>. 
   </div>
 
-	<div>Search using Ctrl-F or Cmd-F</div>
-	<br>
-	<div id="numFound">
-	  Number of assets found: 
-	</div>
-	<br>
+	<div id="datablock" style="background-color:white";>
+		<div>Search using Ctrl-F or Cmd-F</div>
+		<br>
+		
+		<div id="numFound">
+		  Number of assets found: 
+		</div>
+		<br>
  
-    <!-- Populated by jQuery loop -->
-    <div id="display">
+   		 <!-- Populated by jQuery loop -->
+   		 <div id="display">
 	 
-	</div> 
+		</div> 
+	</div> <!--datablock -->	
   
-</div>  <!-- container -->
+</main>
+
+<footer class="container" id="footer-wrap">
+    <!-- OrgNavFooter Script -->
+    <script>
+        // CUSTOM VARIABLES
+        var contactLink = "https://ncar.ucar.edu/contact";     // enter your Webmaster/Feedback link. Include http:// or mailto:
+        var hideOrgNav = false;        // hide the entire OrgNav from view
+        var hideFooter = false;          // hide the entire OrgFooter from view
+        var hideNSF = false;               // hide the NSF disclaimer
+        var footerColor = '#666';       // hex color of the footer font including the #
+        // DO NOT EDIT BELOW THIS POINT
+        var jsHost = (("https:" == document.location.protocol) ? "https://" : "http://");
+        if(typeof jQuery === "undefined"){
+            document.write("<scr"+"ipt src='"+jsHost+"ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js' type='text/javascript'></scr"+"ipt>");
+        }
+     //   document.write("<scr"+"ipt src='"+jsHost+"www2.ucar.edu/js/orgnav' type='text/javascript'></scr"+"ipt>"); 
+    </script>
+  
+  <!--  <script src="http://www2.ucar.edu/js/orgnav" type="text/javascript"></script> -->
+    
+    	<div id="orgFooter"><p>© 2016 UCAR | <a href="http://www2.ucar.edu/privacy-policy" target="_blank">Privacy Policy</a> | <a href="http://www2.ucar.edu/terms-of-use" target="_blank">Terms of Use</a> | <a href="https://www2.ucar.edu/notification-copyright-infringement-digital-millennium-copyright-act" target="_blank">Copyright Issues</a> | <a href="http://www.nsf.gov" target="_blank">Sponsored by NSF</a> | <a href="http://www.ucar.edu" target="_blank">Managed by UCAR</a> | <a href="https://ncar.ucar.edu/contact">Webmaster/Feedback</a> 
+    	<br>Postal Address: P.O. Box 3000, Boulder, CO 80307-3000 • Shipping Address: 3090 Center Green Drive, Boulder, CO 80301</p>
+    	<p>The National Center for Atmospheric Research is sponsored by the National Science Foundation. Any opinions, findings and conclusions or recommendations expressed in this publication are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.</p></div>
+    <!-- END OrgNavFooter Script -->
+</footer>
   
 <script>
 
-
 $(document).ready(function() {
     $.ajax({
-        url: "https://search.datacite.org/api?q=*&fq=prefix:10.5065&wt=json&indent=true&fl=doi,title,description,publicationYear,contributor&rows=5001",
+        url: "https://search.datacite.org/api?q=*&fq=prefix:10.5065&wt=json&indent=true&fl=doi,title,description,publicationYear,contributor&rows=10",
         type: "get",
         dataType: "json"
     }).then(function(data) {
