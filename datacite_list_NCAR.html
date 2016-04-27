@@ -23,7 +23,6 @@
     <!-- Bootstrap theme -->
     <!--<link href="assets/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">-->
     
-
 </head>
 <body>
 
@@ -42,21 +41,6 @@
     </div>
 </header>
 
-<!--
-<div  style="background-color: #24487d";>
-
-            <div class="section clearfix align-center-wrapper">
-               <div id="header-sub-nav"></div>
-               <div id="logo-floater">
-                  <a href="/" title="Home" rel="home" id="logo">
-                  <img src="https://ncar.ucar.edu/sites/default/files/ncar_header.png" alt="Home">
-                  </a>
-               </div>
-               </div>        
-           </div>
-
-</div>
---> 
 
 <main class="container">
 
@@ -64,9 +48,7 @@
 <h1>NCAR Datacite Data Assets</h1>
 <h3>Prototype version</h3>
 </div>
- <!-- Query: https://search.datacite.org/api?q=*&fq=prefix:10.5065<br>
-  Query: https://search.datacite.org/api?q=*&fq=prefix:10.5065&wt=json&indent=true&fl=doi,title,created,updated,title,description,publicationYear,contributor&rows=3000 <br>
-  -->
+
   <div class="panel panel-default">Note: This is a prototype version and provides access to a limited subset of data.<br>
   Please <a href='https://jira.ucar.edu/secure/RapidBoard.jspa?rapidView=52&projectKey=DSET&view=planning.nodetail&quickFilter=118'>provide feedback using Jira</a>. 
   </div>
@@ -104,8 +86,6 @@
         }
      //   document.write("<scr"+"ipt src='"+jsHost+"www2.ucar.edu/js/orgnav' type='text/javascript'></scr"+"ipt>"); 
     </script>
-  
-  <!--  <script src="http://www2.ucar.edu/js/orgnav" type="text/javascript"></script> -->
     
     	<div id="orgFooter"><p>© 2016 UCAR | <a href="http://www2.ucar.edu/privacy-policy" target="_blank">Privacy Policy</a> | <a href="http://www2.ucar.edu/terms-of-use" target="_blank">Terms of Use</a> | <a href="https://www2.ucar.edu/notification-copyright-infringement-digital-millennium-copyright-act" target="_blank">Copyright Issues</a> | <a href="http://www.nsf.gov" target="_blank">Sponsored by NSF</a> | <a href="http://www.ucar.edu" target="_blank">Managed by UCAR</a> | <a href="https://ncar.ucar.edu/contact">Webmaster/Feedback</a> 
     	<br>Postal Address: P.O. Box 3000, Boulder, CO 80307-3000 • Shipping Address: 3090 Center Green Drive, Boulder, CO 80301</p>
@@ -117,7 +97,7 @@
 
 $(document).ready(function() {
     $.ajax({
-        url: "https://search.datacite.org/api?q=*&fq=prefix:10.5065&wt=json&indent=true&fl=doi,title,description,publicationYear,contributor&rows=10",
+        url: "https://search.datacite.org/api?q=*&fq=prefix:10.5065&wt=json&indent=true&fl=doi,title,description,publicationYear,contributor&rows=4000",
         type: "get",
         dataType: "json"
     }).then(function(data) {
