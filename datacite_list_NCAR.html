@@ -4,43 +4,20 @@
  <meta charset="utf-8">
  <meta http-equiv="X-UA-Compatible" content="IE=edge">
  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Datacite NCAR query</title>
+
+ <title>Datacite NCAR query</title>
   
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
  
-   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> 
-   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-  
-      
-    <!-- <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" /> -->
-    <!-- NCAR Theme -->
-    <link href="assets/css/fonts.css" rel="stylesheet" />
-    <link href="assets/css/custom.css" type="text/css" media="screen" rel="stylesheet">
-      
-     <!-- <script src="assets/bootstrap/js/bootstrap.min.js"></script> -->
-       <!-- Bootstrap core CSS -->
-   
-    <!-- Bootstrap theme -->
-    <!--<link href="assets/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">-->
-    
+ <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> 
+ <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+            
+ <!-- NCAR Theme -->
+ <link href="assets/css/fonts.css" rel="stylesheet" />
+ <link href="assets/css/custom.css" type="text/css" media="screen" rel="stylesheet">
+         
 </head>
 <body>
-
-<!--
-<header id="header-wrap" class="hidden-xs">
-    <div class="container">
-        <div id="header" class="row">
-        
-         	<div id="logo-floater">
-                  <a href="/" title="Home" rel="home" id="logo">
-                  <img src="https://ncar.ucar.edu/sites/default/files/ncar_header.png" alt="Home">
-                  <img src="assets/images/nsf_header.png" class="img-responsive" id="nsf-header">
-                  </a>
-               </div>         
-        </div>
-    </div>
-</header>  
--->  
 
  <header id="header-wrap" class="hidden-xs">
     <div class="container">
@@ -51,7 +28,9 @@
                             <img src="assets/images/ncar_ucar_header_logo.png" alt="Home">
                         </a>
                 </div>
-             <!--   <div class="hidden-sm" id="app-title-column">
+             <!--   Use this div instead of above to show custom text in header (e.g. app name) vs "National Center for Atmospheric Research" part of logo 
+                    from ncar_ucar_header_logo.png -->
+             <!--  <div class="hidden-sm" id="app-title-column">
                         <a href="" title="Home" rel="home">
                             <span id="app-title">NCAR Datacite Assets</span>                             
                         </a>
@@ -90,7 +69,7 @@
 		<br>
 		
 		<div id="numFound">
-		   <strong>Number of assets found: </strong>
+		   <strong>Number of records found: </strong>
 		</div>
 	  </div>	
 		
@@ -103,69 +82,68 @@
 </main>
 
 <footer class="container" id="footer-wrap">
-    <!-- OrgNavFooter Script -->
-    <script>
-        // CUSTOM VARIABLES
-        var contactLink = "https://ncar.ucar.edu/contact";     // enter your Webmaster/Feedback link. Include http:// or mailto:
-        var hideOrgNav = false;        // hide the entire OrgNav from view
-        var hideFooter = false;          // hide the entire OrgFooter from view
-        var hideNSF = false;               // hide the NSF disclaimer
-        var footerColor = '#666';       // hex color of the footer font including the #
-        // DO NOT EDIT BELOW THIS POINT
-        var jsHost = (("https:" == document.location.protocol) ? "https://" : "http://");
-        if(typeof jQuery === "undefined"){
-            document.write("<scr"+"ipt src='"+jsHost+"ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js' type='text/javascript'></scr"+"ipt>");
-        }
-     //   document.write("<scr"+"ipt src='"+jsHost+"www2.ucar.edu/js/orgnav' type='text/javascript'></scr"+"ipt>"); 
-    </script>
-    
+  
     	<div id="orgFooter"><p>© 2016 UCAR | <a href="http://www2.ucar.edu/privacy-policy" target="_blank">Privacy Policy</a> | <a href="http://www2.ucar.edu/terms-of-use" target="_blank">Terms of Use</a> | <a href="https://www2.ucar.edu/notification-copyright-infringement-digital-millennium-copyright-act" target="_blank">Copyright Issues</a> | <a href="http://www.nsf.gov" target="_blank">Sponsored by NSF</a> | <a href="http://www.ucar.edu" target="_blank">Managed by UCAR</a> | <a href="https://ncar.ucar.edu/contact">Webmaster/Feedback</a> 
     	<br>Postal Address: P.O. Box 3000, Boulder, CO 80307-3000 • Shipping Address: 3090 Center Green Drive, Boulder, CO 80301</p>
     	<p>The National Center for Atmospheric Research is sponsored by the National Science Foundation. Any opinions, findings and conclusions or recommendations expressed in this publication are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.</p></div>
-    <!-- END OrgNavFooter Script -->
 </footer>
+ 
   
 <script>
 
-$(document).ready(function() {
-    $.ajax({
-        url: "https://search.datacite.org/api?q=*&fq=prefix:10.5065&wt=json&indent=true&fl=doi,title,description,publicationYear,contributor&rows=4000",
+function queryDatacite(numberOfRows) {
+
+	return  $.ajax({
+        url: "https://search.datacite.org/api?q=*&fq=prefix:10.5065&wt=json&indent=true&fl=doi,title,description,publicationYear,contributor&rows="+numberOfRows,
         type: "get",
         dataType: "json"
-    }).then(function(data) {
-    	var numFound = data.response.numFound;
-        $('#numFound').append(numFound);
-       
-      // $('#title').append(data.response.docs[1].title);
-     //  $('#doi').append(JSON.stringify(data.response.docs, null, 3));
-      // $('#doi').append(JSON.stringify(data));
-      
-      	var doclist = data.response.docs;
-      	console.log(JSON.stringify(doclist));   
-      
-       		
-      		$.each(doclist, function (i) {
-      			var title = doclist[i].title;
-      			var doi = doclist[i].doi;
-      			var doi_link = '<a href=http://dx.doi.org/' + doi + '>' + doi + '</a>';
-      			var description = doclist[i].description;
-      			var contributor = doclist[i].contributor;
-      		   // console.log("title field: " + title);
-      		   // console.log("doi field: " + doi);
-      		   // console.log("description field: " + description);
-      		   console.log("contributor field: " + contributor);
-      		  
-      		    // This sets up the display of the page (template)
-      		   // $('#display').append(doi_link + "<br><div>" + title + "</div><br><div>" + description + "</div><br>");
-      		    
-      		    $('#display').append("<div><b>" + title + "</b></div>");
-      		    $('#display').append("<div>" + doi_link + "</div>");
-      		    $('#display').append("<div><h5>Description</h5>" + description + "</div>");
-      		    $('#display').append("<div><h5>Contributors</h5>" + contributor + "</div>");
-      		    $('#display').append("<hr>");
-      		});     		
-    
     });
+}
+
+function updateDisplayNumberOfRecordsFound (numberOfRecordsFound) {
+   $('#numFound').append(numberOfRecordsFound);
+}
+
+function updateDisplayRecords (doclist) {
+
+	$.each(doclist, function (i) {
+		var title = doclist[i].title;
+		var doi = doclist[i].doi;
+		var doi_link = '<a href=http://dx.doi.org/' + doi + '>' + doi + '</a>';
+		var description = doclist[i].description;
+		var contributor = doclist[i].contributor;		   
+	   // console.log("doi field: " + doi);
+	  
+		// This sets up the display of the page (template)
+	   // $('#display').append(doi_link + "<br><div>" + title + "</div><br><div>" + description + "</div><br>");
+		
+		$('#display').append("<div><b>" + title + "</b></div>");
+		$('#display').append("<div>" + doi_link + "</div>");
+		$('#display').append("<div><h5>Description</h5>" + description + "</div>");
+		$('#display').append("<div><h5>Contributors</h5>" + contributor + "</div>");
+		$('#display').append("<hr>");
+	});    				
+}		
+
+
+$(document).ready(function() {
+
+	queryDatacite(0)
+	.then(function(data) {
+    
+    	var numberOfRecordsFound = data.response.numFound;
+        updateDisplayNumberOfRecordsFound(numberOfRecordsFound);        
+      
+        queryDatacite(numberOfRecordsFound)
+        .done (function (data) {
+      
+            var doclist = data.response.docs;
+      	    //console.log(JSON.stringify(doclist));   
+             		
+	 	    updateDisplayRecords (doclist);
+		
+        }); 
+    }); 
 });
 </script>
 
