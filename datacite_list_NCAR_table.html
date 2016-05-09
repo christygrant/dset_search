@@ -15,7 +15,9 @@
   <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.js"></script>
  <!-- <script type="text/javascript" src="https://cdn.datatables.net/1.10.10/js/dataTables.filter.html.js"></script> -->
 
-  
+  <!-- NCAR Theme -->
+<!-- <link href="assets/css/fonts.css" rel="stylesheet" />
+ <link href="assets/css/custom.css" type="text/css" media="screen" rel="stylesheet"> -->
 
 </head>
 <body>
@@ -35,7 +37,7 @@ Query: https://search.datacite.org/api?q=*&fq=prefix:10.5065<br>
 Query: https://search.datacite.org/api?q=*&fq=prefix:10.5065&wt=json&indent=true&fl=doi,title,description,publicationYear,contributor&rows=3000 <br>
 -->	
 
-    <div id="numFound">
+  <div id="numFound">
 	Number of assets found: 
 	</div>
  
@@ -56,56 +58,76 @@ Query: https://search.datacite.org/api?q=*&fq=prefix:10.5065&wt=json&indent=true
   
 <script>
 
+function queryDatacite(numberOfRows) {
 
-
-$(document).ready(function() {
-    $.ajax({
-        url: "https://search.datacite.org/api?q=*&fq=prefix:10.5065&wt=json&indent=true&fl=doi,title,description,publicationYear,contributor&rows=3000",
+  return  $.ajax({
+        url: "https://search.datacite.org/api?q=*&fq=prefix:10.5065&wt=json&indent=true&fl=doi,title,description,publicationYear,contributor&rows="+numberOfRows,
         type: "get",
         dataType: "json"
-    }).then(function(data) {
-    	var numFound = data.response.numFound;
-        $('#numFound').append(numFound);
-       
-      // $('#title').append(data.response.docs[1].title);
-     //  $('#doi').append(JSON.stringify(data.response.docs, null, 3));
-      // $('#doi').append(JSON.stringify(data));
-      
-      	var doclist = data.response.docs;
-      	//console.log(JSON.stringify(doclist));
-      		
-      		
-         $('#example').DataTable({
+    });
+}
+
+function updateDisplayNumberOfRecordsFound (numberOfRecordsFound) {
+   $('#numFound').append(numberOfRecordsFound);
+}
+
+function updateDisplayRecords (doclist) {
+
+  
+    // This sets up the display of the page (template)
+     // $('#display').append(doi_link + "<br><div>" + title + "</div><br><div>" + description + "</div><br>");
+    
+    $('#example').DataTable({
             serverSide: false,
             paging: false,
             searching: true,
-         	data : doclist,
-         	columns : [
-         	  { data: "title",
-         	    defaultContent: "<i>Not set</i>",
-         	    width: "20%",
-         	    sortable: true, 
-         	    searchable: true},
-         	  { data: "doi", sortable: true, searchable: true},         	  
-         	  { data: "description",
-         	    defaultContent: "<i>Not set</i>",
-         	    sortable: true, 
-         	    searchable: true},
-         	  { data: "contributor",
-         	    defaultContent: "<i>Not set</i>"}
-         	],
-         	columnDefs : [
-         	 { type: "string", targets: [0,2,3]},
-         	{
-         	   targets: 1,
-         	   render: function(data, type, row) {
-         	      return '<a href=http://dx.doi.org/' + data + '>' + data + '</a>';
-         		}
-         	}
-         	
-         	]
+          data : doclist,
+          columns : [
+            { data: "title",
+              defaultContent: "<i>Not set</i>",
+              width: "20%",
+              sortable: true, 
+              searchable: true},
+            { data: "doi", sortable: true, searchable: true},             
+            { data: "description",
+              defaultContent: "<i>Not set</i>",
+              sortable: true, 
+              searchable: true},
+            { data: "contributor",
+              defaultContent: "<i>Not set</i>"}
+          ],
+          columnDefs : [
+           { type: "string", targets: [0,2,3]},
+          {
+             targets: 1,
+             render: function(data, type, row) {
+                return '<a href=http://dx.doi.org/' + data + '>' + data + '</a>';
+            }
+          }
+          
+          ]
          
-         });
+         });       
+}   
+
+$(document).ready(function() {
+
+
+    queryDatacite(0)
+    .then(function(data) {
+
+    	var numberOfRecordsFound = data.response.numFound;
+      updateDisplayNumberOfRecordsFound(numberOfRecordsFound);        
+      
+       queryDatacite(numberOfRecordsFound)
+       .done (function (data) {
+      
+          var doclist = data.response.docs;
+          //console.log(JSON.stringify(doclist));   
+                
+          updateDisplayRecords (doclist);
+         
+        });
       
     });
 });
