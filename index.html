@@ -94,7 +94,7 @@
 function queryDatacite(numberOfRows) {
 
 	return  $.ajax({
-        url: "https://search.datacite.org/api?q=*&fq=prefix:10.5065&wt=json&indent=true&fl=doi,title,description,publicationYear,contributor,creator&rows="+numberOfRows,
+        url: "https://search.datacite.org/api?q=*&fq=prefix:10.5065&wt=json&indent=true&fl=doi,title,description,publicationYear,contributor,creator,resourceType&rows="+numberOfRows,
         type: "get",
         dataType: "json"
     });
@@ -112,7 +112,8 @@ function updateDisplayRecords (doclist) {
 		var doi_link = '<a href=http://dx.doi.org/' + doi + '>' + doi + '</a>';
 		var description = doclist[i].description;
 		var contributor = doclist[i].contributor;
-    var creator = doclist[i].creator; 		   
+    var creator = doclist[i].creator; 	
+    var resourceType = doclist[i].resourceType; 	   
 	   // console.log("doi field: " + doi);
 	  
 		// This sets up the display of the page (template)
@@ -123,6 +124,7 @@ function updateDisplayRecords (doclist) {
 		$('#display').append("<div><h5>Description</h5>" + description + "</div>");
 		$('#display').append("<div><h5>Contributors</h5>" + contributor + "</div>");
     $('#display').append("<div><h5>Creator</h5>" + creator + "</div>");
+    $('#display').append("<div><h5>Resource Type</h5>" + resourceType + "</div>");
 		$('#display').append("<hr>");
 	});    				
 }		
@@ -140,7 +142,7 @@ $(document).ready(function() {
         .done (function (data) {
       
             var doclist = data.response.docs;
-      	    //console.log(JSON.stringify(doclist));   
+      	    console.log(JSON.stringify(doclist));   
              		
 	 	    updateDisplayRecords (doclist);
 		
