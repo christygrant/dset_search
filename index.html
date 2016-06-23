@@ -58,7 +58,7 @@
         <h3 class="panel-title">Note: This is a prototype version and provides access to a limited subset of data.</h3>
       </div>
       <div class="panel-body">
-        <h5 class="media-heading">Please <a href='https://jira.ucar.edu/secure/RapidBoard.jspa?rapidView=52&projectKey=DSET&view=planning.nodetail&quickFilter=118'>provide feedback using Jira</a>.</h5>
+        <h5 class="media-heading">Please <a href="mailto:dset-support@ucar.edu?Subject=DSET%20Datacite%20Search%20Page" target="_top">email SAGE support</a> to provide feedback</a>.</h5>
       </div>
   </div>
 
@@ -94,7 +94,7 @@
 function queryDatacite(numberOfRows) {
 
 	return  $.ajax({
-        url: "https://search.datacite.org/api?q=*&fq=prefix:10.5065&wt=json&indent=true&fl=doi,title,description,publicationYear,contributor,creator,resourceType&rows="+numberOfRows,
+        url: "https://search.datacite.org/api?q=*&fq=prefix:10.5065&wt=json&indent=true&fl=doi,title,description,publicationYear,contributor,creator,resourceTypeGeneral,resourceType&rows="+numberOfRows,
         type: "get",
         dataType: "json"
     });
@@ -112,8 +112,9 @@ function updateDisplayRecords (doclist) {
 		var doi_link = '<a href=http://dx.doi.org/' + doi + '>' + doi + '</a>';
 		var description = doclist[i].description;
 		var contributor = doclist[i].contributor;
-    var creator = doclist[i].creator; 	
-    var resourceType = doclist[i].resourceType; 	   
+		var creator = doclist[i].creator; 	
+		var resourceTypeGeneral = doclist[i].resourceTypeGeneral; 	 
+		var resourceType = doclist[i].resourceType;   
 	   // console.log("doi field: " + doi);
 	  
 		// This sets up the display of the page (template)
@@ -123,8 +124,8 @@ function updateDisplayRecords (doclist) {
 		$('#display').append("<div>" + doi_link + "</div>");
 		$('#display').append("<div><h5>Description</h5>" + description + "</div>");
 		$('#display').append("<div><h5>Contributors</h5>" + contributor + "</div>");
-    $('#display').append("<div><h5>Creator</h5>" + creator + "</div>");
-    $('#display').append("<div><h5>Resource Type</h5>" + resourceType + "</div>");
+    	$('#display').append("<div><h5>Creator</h5>" + creator + "</div>");
+    	$('#display').append("<div><h5>Resource Type</h5>" + resourceTypeGeneral + "/" + resourceType + "</div>");
 		$('#display').append("<hr>");
 	});    				
 }		
@@ -142,7 +143,7 @@ $(document).ready(function() {
         .done (function (data) {
       
             var doclist = data.response.docs;
-      	    //console.log(JSON.stringify(doclist));   
+      	    //jqueconsole.log(JSON.stringify(doclist));   
              		
 	 	    updateDisplayRecords (doclist);
 		
