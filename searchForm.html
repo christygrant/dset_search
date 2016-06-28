@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta charset="utf-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+
+ <title>Datacite NCAR query</title>
+  
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+ 
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> 
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+            
+ <!-- NCAR Theme -->
+ <link href="assets/css/fonts.css" rel="stylesheet" />
+ <link href="assets/css/custom.css" type="text/css" media="screen" rel="stylesheet">
+         
+</head>
+<body>
+
+ <header id="header-wrap" class="hidden-xs">
+    <div class="container">
+        <div id="header" class="row">
+            <div class="col-md-8 col-sm-8 hidden-xs">
+                <div class="" style="float: left">
+                        <a href="" title="Home" rel="home" id="ncar-ucar-logo">
+                            <img src="assets/images/ncar_ucar_header_logo.png" alt="Home">
+                        </a>
+                </div>
+             <!--   Use this div instead of above to show custom text in header (e.g. app name) vs "National Center for Atmospheric Research" part of logo 
+                    from ncar_ucar_header_logo.png -->
+             <!--  <div class="hidden-sm" id="app-title-column">
+                        <a href="" title="Home" rel="home">
+                            <span id="app-title">NCAR Datacite Assets</span>                             
+                        </a>
+                </div> -->
+            </div>
+            <div class="col-md-4 col-sm-4 hidden-xs">
+                <a href="http://www.nsf.gov/">
+                    <img src="assets/images/nsf_header.png" class="img-responsive" id="nsf-header">
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+<main class="container">
+
+  <div id="titleblock" > 
+    <h1>NCAR Datacite Data Assets</h1>
+    <h3>Prototype Version</h3>
+  </div>
+
+  <div class="panel panel-warning">
+    <div class="panel-heading">
+      <h3 class="panel-title">Note: This is a prototype version and provides access to a limited subset of data.</h3>
+    </div>
+    <div class="panel-body">
+       <h5 class="media-heading">Please <a href="mailto:dset-support@ucar.edu?Subject=DSET%20Datacite%20Search%20Page" target="_top">email SAGE support</a> to provide feedback</a>.</h5>
+    </div>
+  </div>
+
+  <div class="col-sm-6 col-sm-offset-1">
+
+      <h1>Datacite Search</h1>
+
+      <!-- FORM action performed by jQuery -->
+      <form id="searchform" action="" method="GET">
+      
+          <!-- NAME -->
+          <div id="name-group" class="form-group">
+              <label for="searchtext">Search</label>
+              <input id="searchtext" type="text" class="form-control" name="searchtext" placeholder="Search Datacite">
+              <!-- errors will go here -->
+          </div>
+
+          <input type="submit" id="submit" value="Submit" class="btn btn-success"></input> 
+
+      </form>
+
+     <br>
+
+    <!-- Results populated by jQuery -->
+    <div id="datablock">
+
+      <div id="numFoundWell" class="well">
+        <div id="numFound">
+           <!--numFound text here -->   
+        </div>
+      </div>
+
+      <div id="displayResults">
+          <!-- Query results here -->
+      </div> 
+    </div> <!-- datablock -->    
+
+  </div>
+
+</main>
+
+<footer class="container" id="footer-wrap">
+  
+      <div id="orgFooter"><p>© 2016 UCAR | <a href="http://www2.ucar.edu/privacy-policy" target="_blank">Privacy Policy</a> | <a href="http://www2.ucar.edu/terms-of-use" target="_blank">Terms of Use</a> | <a href="https://www2.ucar.edu/notification-copyright-infringement-digital-millennium-copyright-act" target="_blank">Copyright Issues</a> | <a href="http://www.nsf.gov" target="_blank">Sponsored by NSF</a> | <a href="http://www.ucar.edu" target="_blank">Managed by UCAR</a> | <a href="https://ncar.ucar.edu/contact">Webmaster/Feedback</a> 
+      <br>Postal Address: P.O. Box 3000, Boulder, CO 80307-3000 • Shipping Address: 3090 Center Green Drive, Boulder, CO 80301</p>
+      <p>The National Center for Atmospheric Research is sponsored by the National Science Foundation. Any opinions, findings and conclusions or recommendations expressed in this publication are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.</p></div>
+</footer>
+
+
+<script>
+
+function queryDatacite(numberOfRows, searchtext) {
+
+  console.log ('in queryDatacite function numberOfRows=' + numberOfRows);
+
+  search_string = searchtext.searchtext;
+  console.log ('in queryDatacite function search_string=' + search_string);
+  //console.log ('in queryDatacite function search_string.len=' + search_string.length);
+
+  // If nothing entered, search all
+  if (search_string == null || (!search_string.trim())) {
+
+    var querystring = "https://search.datacite.org/api?q=*&fq=prefix:10.5065&wt=json&indent=true&fl=doi,title,description,publicationYear,contributor,creator,resourceTypeGeneral&rows="+numberOfRows;
+  }
+  else
+  {  
+    var querystring = "https://search.datacite.org/api?q=" + search_string + "&fq=prefix:10.5065&wt=json&indent=true&fl=doi,title,description,publicationYear,contributor,creator,resourceTypeGeneral,resourceTypeGeneral&rows="+numberOfRows;
+  }
+
+  console.log ('**in queryDatacite function querystring=' + querystring);
+
+  data = $.ajax({
+        url: querystring,
+        type: "get",
+        dataType: "json"
+    });
+
+  return data;
+    
+}
+
+function updateDisplayNumberOfRecordsFound (numberOfRecordsFound) {
+
+   $('#numFound').html('<strong>Number of records found: </strong>' + numberOfRecordsFound);
+}
+
+function updateDisplayResults (doclist) {
+
+  // replace previous results
+  $('#displayResults').html("");
+
+  $.each(doclist, function (i) {
+
+    var title = doclist[i].title;
+    var doi = doclist[i].doi;
+    var doi_link = '<a href=http://dx.doi.org/' + doi + '>' + doi + '</a>';
+    var description = doclist[i].description;
+    var contributor = doclist[i].contributor;
+    var creator = doclist[i].creator;   
+    var resourceTypeGeneral = doclist[i].resourceTypeGeneral;      
+     //console.log("doi field: " + doi);
+    
+    // This sets up the display of the page (template)
+     // $('#display').append(doi_link + "<br><div>" + title + "</div><br><div>" + description + "</div><br>");
+      $('#displayResults').append("<div><b>" + title + "</b></div>");
+      $('#displayResults').append("<div>" + doi_link + "</div>");
+      $('#displayResults').append("<div><h5>Description</h5>" + description + "</div>");
+      $('#displayResults').append("<div><h5>Contributors</h5>" + contributor + "</div>");
+      $('#displayResults').append("<div><h5>Creator</h5>" + creator + "</div>");
+      $('#displayResults').append("<div><h5>Resource Type</h5>" + resourceTypeGeneral + "</div>");
+      $('#displayResults').append("<hr>");
+
+  });           
+}   
+
+
+$(document).ready(function() {
+
+  $("#numFoundWell").hide();
+
+    var search_params = null;
+
+    $('#searchtext').unbind('click');
+
+    // process the form
+    $('form').submit(function() {
+
+        // get the form data
+        // there are many ways to get this data using jQuery (you can use the class or id also)
+        var formData = {
+            'searchtext' : $('input[name=searchtext]').val()
+        };
+
+        console.log('The formData ' + $('input[name=searchtext]').val());
+
+        search_params=formData;
+      
+        queryDatacite(0, search_params)
+       .then(function(data) {
+          //console.log ('debug: then search_params param is ' + JSON.stringify(search_params));
+          //console.log ('debug: then data is ' + JSON.stringify(data));
+    
+          var numberOfRecordsFound = data.response.numFound;
+
+          $("#numFoundWell").show();
+          updateDisplayNumberOfRecordsFound(numberOfRecordsFound);       
+      
+          queryDatacite(numberOfRecordsFound, search_params)
+         .done (function (data) {
+      
+            var doclist = data.response.docs;
+            //jqueconsole.log(JSON.stringify(doclist));   
+                
+           updateDisplayResults (doclist);
+    
+         }); 
+       }); 
+    
+      // stop the form from submitting the normal way and refreshing the page or you won't see results
+      event.preventDefault();
+     
+    }); //function
+
+}); //ready
+</script>
+
+</body>
+</html>
