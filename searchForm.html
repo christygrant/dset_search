@@ -65,13 +65,80 @@
   <h1>DataCite Search</h1>
 
 <!-- no action, self submit -->
-	<form name="simpleQueryForm" id="simpleQueryForm" class="form-inline"  method="GET">
+  <form name="simpleQueryForm" id="simpleQueryForm" class="form-inline"  method="GET">
         <div class="form-group">
             <label class="sr-only" for="freetext">Search</label>
 
             <input type="text" name="freetext" id="freetext" size="32" class="form-control">
 
-            <button class="btn btn-success" id="submitButton">Search</button>
+            <button class="btn btn-success" id="submitButton">Search</button> 
+
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#searchHelp">Help</button>
+
+            <!-- Bootstrap Modal for help text-->
+            <div class="modal fade" id="searchHelp" role="dialog">
+              <div class="modal-dialog">
+              
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Search Help</h4>
+                  </div>
+                  <div class="modal-body">
+                    <p>Use * to find all records, or enter a search term. Examples can be found at the <a href="http://search.datacite.org/help.html">DataCite</a> Metadata search page.
+                    <h2>Query Examples</h2>
+                    <table>
+                      <tr>
+                        <th>query</th>
+                        <th>retrieves documents...</th>
+                      </tr>
+                      <tr>
+                        <td><code>laser</code></td>
+                        <td>containing <em>laser</em></td>
+                      </tr>
+                      <tr>
+                        <td><code>laser safety</code></td>
+                        <td>containing <em>laser</em> and <em>safety</em></td>
+                      </tr>
+                      <tr>
+                        <td><code>laser -medicine</code></td>
+                        <td>containing <em>laser</em> and not <em>medicine</em></td>
+                      </tr>
+                      <tr>
+                        <td><code>laser AND (red OR green)</code></td>
+                        <td>containing <em>laser</em> and <em>red</em> or <em>green</em></td>
+                      </tr>
+                      <tr>
+                        <td><code>"wind turbine"</code></td>
+                        <td>containing <em>wind turbine</em> as a phrase</td>
+                      </tr>
+                      <tr>
+                        <td><code>subject:geology</code></td>
+                        <td>containing <em>geology</em> in metadata field <em>subject</em></td>
+                      </tr>
+                      <tr>
+                        <td><code>allocator:(BL OR TIB)</code></td>
+                        <td>belonging to DataCite members <a href="http://datacite.org/britishlibrary">BL</a> or <a href="http://datacite.org/TIB">TIB</a></td>
+                      </tr>
+                      <tr>
+                        <td><code>publicationYear:[2000 TO 2005]</code></td>
+                        <td>published between 2000 and 2005</td>
+                      </tr>
+                      <tr>
+                        <td><code>uploaded:[NOW-5DAYS TO NOW]</code></td>
+                        <td>uploaded to DataCite in the last 5 days</td>
+                      </tr>
+                    </table>
+                    </p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
         </div>
   </form>
 
@@ -198,13 +265,14 @@ $(document).ready(function() {
 
   $("#numFoundWell").hide();
 
+
     // get the form data from the param passed
     var searchtext = getParameterByName('freetext');
     //console.log ("searchtext=" + searchtext );
 
     $("#freetext").val(searchtext);
 
- 		queryDatacite(0, searchtext)
+    queryDatacite(0, searchtext)
     .done (function(data) {
 
       //console.log ("returned data: " + JSON.stringify(data));
