@@ -15,11 +15,12 @@
  <!-- NCAR Theme -->
  <link href="assets/css/fonts.css" rel="stylesheet" />
  <link href="assets/css/custom.css" type="text/css" media="screen" rel="stylesheet">
-         
+    
 </head>
+
 <body>
 
- <header id="header-wrap" class="hidden-xs">
+  <header id="header-wrap" class="hidden-xs">
     <div class="container">
         <div id="header" class="row">
             <div class="col-md-8 col-sm-8 hidden-xs">
@@ -45,7 +46,6 @@
     </div>
 </header>
 
-
 <main class="container">
 
   <div id="titleblock" > 
@@ -53,50 +53,43 @@
     <h3>Prototype Version</h3>
   </div>
 
-  <div class="panel panel-warning">
+<div class="panel panel-warning">
     <div class="panel-heading">
       <h3 class="panel-title">Note: This is a prototype version and provides access to a limited subset of data.</h3>
     </div>
     <div class="panel-body">
-       <h5 class="media-heading">Please <a href="mailto:dset-support@ucar.edu?Subject=DSET%20DataCite%20Search%20Page" target="_top">email SAGE support</a> to provide feedback</a>.</h5>
+       <h5 class="media-heading">Please <a href="mailto:dset-support@ucar.edu?Subject=DSET%20Datacite%20Search%20Page" target="_top">email SAGE support</a> to provide feedback</a>.</h5>
     </div>
   </div>
 
-  <div class="col-sm-6 col-sm-offset-1">
+  <h1>DataCite Search</h1>
 
-      <h1>DataCite Search</h1>
+<!-- no action, self submit -->
+	<form name="simpleQueryForm" id="simpleQueryForm" class="form-inline"  method="GET">
+        <div class="form-group">
+            <label class="sr-only" for="freetext">Search</label>
 
-      <!-- FORM action performed by jQuery -->
-      <form id="searchform" action="" method="GET">
-      
-          <!-- NAME -->
-          <div id="name-group" class="form-group">
-              <label for="searchtext">Search</label>
-              <input id="searchtext" type="text" class="form-control" name="searchtext" placeholder="Search DataCite">
-              <!-- errors will go here -->
-          </div>
+            <input type="text" name="freetext" id="freetext" size="32" class="form-control">
 
-          <input type="submit" id="submit" value="Submit" class="btn btn-success"></input> 
+            <button class="btn btn-success" id="submitButton">Search</button>
+        </div>
+  </form>
 
-      </form>
-
-     <br>
+<br>
 
     <!-- Results populated by jQuery -->
     <div id="datablock">
 
       <div id="numFoundWell" class="well">
         <div id="numFound">
-           <!--numFound text here -->   
+           <!--numFound text put here -->   
         </div>
       </div>
 
       <div id="displayResults">
-          <!-- Query results here -->
+          <!-- Query results put here -->
       </div> 
     </div> <!-- datablock -->    
-
-  </div>
 
 </main>
 
@@ -112,16 +105,18 @@
 
 function queryDatacite(numberOfRows, searchtext) {
 
-  console.log ('in queryDatacite function numberOfRows=' + numberOfRows);
+  //console.log ('in queryDatacite function numberOfRows=' + numberOfRows);
 
-  search_string = searchtext.searchtext;
-  console.log ('in queryDatacite function search_string=' + search_string);
+  //search_string = searchtext.searchtext;
+  search_string = searchtext;
+
+  //console.log ('in queryDatacite function search_string=' + search_string);
   //console.log ('in queryDatacite function search_string.len=' + search_string.length);
 
-  // If nothing entered, search all
+  // If no params (like on initial load) form is empty/ready.
   if (search_string == null || (!search_string.trim())) {
 
-    var querystring = "https://search.datacite.org/api?q=*&fq=prefix:10.5065&wt=json&indent=true&fl=doi,title,description,publicationYear,contributor,creator,resourceTypeGeneral&rows="+numberOfRows;
+   return "";
   }
   else
   {  
@@ -131,13 +126,12 @@ function queryDatacite(numberOfRows, searchtext) {
   console.log ('**in queryDatacite function querystring=' + querystring);
 
   data = $.ajax({
-        url: querystring,
-        type: "get",
-        dataType: "json"
-    });
+    url: querystring,
+    type: "get",
+    dataType: "json"
+  });
 
   return data;
-    
 }
 
 function updateDisplayNumberOfRecordsFound (numberOfRecordsFound) {
@@ -163,66 +157,75 @@ function updateDisplayResults (doclist) {
     
     // This sets up the display of the page (template)
      // $('#display').append(doi_link + "<br><div>" + title + "</div><br><div>" + description + "</div><br>");
-      $('#displayResults').append("<div><b>" + title + "</b></div>");
-      $('#displayResults').append("<div>" + doi_link + "</div>");
-      $('#displayResults').append("<div><h5>Description</h5>" + description + "</div>");
-      $('#displayResults').append("<div><h5>Contributors</h5>" + contributor + "</div>");
-      $('#displayResults').append("<div><h5>Creator</h5>" + creator + "</div>");
-      $('#displayResults').append("<div><h5>Resource Type</h5>" + resourceTypeGeneral + "</div>");
-      $('#displayResults').append("<hr>");
+    $('#displayResults').append("<div><b>" + title + "</b></div>");
+    $('#displayResults').append("<div>" + doi_link + "</div>");
+    $('#displayResults').append("<div><h5>Description</h5>" + description + "</div>");
+    $('#displayResults').append("<div><h5>Contributors</h5>" + contributor + "</div>");
+    $('#displayResults').append("<div><h5>Creator</h5>" + creator + "</div>");
+    $('#displayResults').append("<div><h5>Resource Type</h5>" + resourceTypeGeneral + "</div>");
+    $('#displayResults').append("<hr>");
 
   });           
 }   
 
+// Get the param passed in to the form in the URL
+// TODO: Only need 1 of these functions.  Which one?
+function getParameterByName(name) {
+    var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+}
 
+var getUrlParameter = function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+};
+
+/* On page load, get the parameter from the url (nothing or text) and use that to set up the query to DataCite.
+** First get the number of records that match the criteria, and use that as the "rows" param to the DataCite API query to maximize efficiency
+** of the 2nd query to DataCite, which gets the JSON results.  The results are displayed by modifying div placeholder contents.
+*/
 $(document).ready(function() {
 
   $("#numFoundWell").hide();
 
-    var search_params = null;
+    // get the form data from the param passed
+    var searchtext = getParameterByName('freetext');
+    //console.log ("searchtext=" + searchtext );
 
-    $('#searchtext').unbind('click');
+    $("#freetext").val(searchtext);
 
-    // process the form
-    $('form').submit(function() {
+ 		queryDatacite(0, searchtext)
+    .done (function(data) {
 
-        // get the form data
-        // there are many ways to get this data using jQuery (you can use the class or id also)
-        var formData = {
-            'searchtext' : $('input[name=searchtext]').val()
-        };
+      //console.log ("returned data: " + JSON.stringify(data));
 
-        console.log('The formData ' + $('input[name=searchtext]').val());
+      var numberOfRecordsFound = data.response.numFound;
 
-        search_params=formData;
+      $("#numFoundWell").show();
+
+      updateDisplayNumberOfRecordsFound(numberOfRecordsFound);       
       
-        queryDatacite(0, search_params)
-       .then(function(data) {
-          //console.log ('debug: then search_params param is ' + JSON.stringify(search_params));
-          //console.log ('debug: then data is ' + JSON.stringify(data));
-    
-          var numberOfRecordsFound = data.response.numFound;
-
-          $("#numFoundWell").show();
-          updateDisplayNumberOfRecordsFound(numberOfRecordsFound);       
+      queryDatacite(numberOfRecordsFound, searchtext)
+      .done (function (data) {
       
-          queryDatacite(numberOfRecordsFound, search_params)
-         .done (function (data) {
-      
-            var doclist = data.response.docs;
-            //jqueconsole.log(JSON.stringify(doclist));   
+          var doclist = data.response.docs;
+          //console.log(JSON.stringify(doclist));   
                 
-           updateDisplayResults (doclist);
-    
-         }); 
-       }); 
-    
-      // stop the form from submitting the normal way and refreshing the page or you won't see results
-      //event.preventDefault();
-      return false;
-     
-    }); //function
+          updateDisplayResults (doclist);
 
+      });
+    });        
+         
 }); //ready
 </script>
 
