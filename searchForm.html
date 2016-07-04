@@ -222,6 +222,7 @@ function updateDisplayResults (doclist) {
 
     var title = doclist[i].title;
     var doi = doclist[i].doi;
+    var title_link = '<a href=http://dx.doi.org/' + doi + '>' + title + '</a>';  
     var doi_link = '<a href=http://dx.doi.org/' + doi + '>' + doi + '</a>';
     var description = doclist[i].description;
     var contributor = doclist[i].contributor;
@@ -231,8 +232,8 @@ function updateDisplayResults (doclist) {
     
     // This sets up the display of the page (template)
      // $('#display').append(doi_link + "<br><div>" + title + "</div><br><div>" + description + "</div><br>");
-    $('#displayResults').append("<div><b>" + title + "</b></div>");
-    $('#displayResults').append("<div>" + doi_link + "</div>");
+    $('#displayResults').append("<div><b>" + title_link+ "</b></div>");
+    $('#displayResults').append("<div>" + doi + "</div>");
     $('#displayResults').append("<div><h5>Description</h5>" + description + "</div>");
     $('#displayResults').append("<div><h5>Contributors</h5>" + contributor + "</div>");
     $('#displayResults').append("<div><h5>Creator</h5>" + creator + "</div>");
