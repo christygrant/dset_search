@@ -15,6 +15,8 @@
  <!-- NCAR Theme -->
  <link href="assets/css/fonts.css" rel="stylesheet" />
  <link href="assets/css/custom.css" type="text/css" media="screen" rel="stylesheet">
+
+ <link rel="icon" href="assets/images/favicon.ico">
     
 </head>
 
@@ -83,11 +85,11 @@
                 <div class="modal-content">
                   <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Search Help</h4>
+                    <h3 class="modal-title">Search Help</h3>
                   </div>
                   <div class="modal-body">
                     <p>Use * to find all records, or enter a search term. Examples can be found at the <a href="http://search.datacite.org/help.html">DataCite</a> Metadata search page.
-                    <h2>Query Examples</h2>
+                    <h4>Query Examples</h4>
                     <table>
                       <tr>
                         <th>query</th>
@@ -119,7 +121,7 @@
                       </tr>
                       <tr>
                         <td><code>ResourceTypeGeneral:Software</code></td>
-                        <td><em>Resource Type General </em> of <em>Software</em> shown in Resource Type</td>
+                        <td>containing <em>Software</em> in <em>Resource Type</em></td>
                       </tr>
                       <tr>
                         <td><code>allocator:(BL OR TIB)</code></td>
@@ -156,10 +158,11 @@
            <!--numFound text put here -->   
         </div>
       </div>
-
+      
       <div id="displayResults">
           <!-- Query results put here -->
       </div> 
+      
     </div> <!-- datablock -->    
 
 </main>
@@ -269,6 +272,7 @@ $(document).ready(function() {
 
   $("#numFoundWell").hide();
 
+ 
 
     // get the form data from the param passed
     var searchtext = getParameterByName('freetext');
