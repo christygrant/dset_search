@@ -194,7 +194,7 @@ function queryDatacite(numberOfRows, searchtext) {
   }
   else
   {  
-    var querystring = "https://search.datacite.org/api?q=" + search_string + "&fq=prefix:10.5065&wt=json&indent=true&fl=doi,title,description,publicationYear,contributor,creator,resourceTypeGeneral,resourceTypeGeneral&rows="+numberOfRows;
+    var querystring = "https://search.datacite.org/api?q=" + search_string + "&fq=prefix:10.5065&fq=is_active:true&wt=json&indent=true&fl=doi,title,description,publicationYear,contributor,creator,resourceTypeGeneral,resourceType&rows="+numberOfRows;
   }
 
   console.log ('**in queryDatacite function querystring=' + querystring);
