@@ -55,7 +55,7 @@
     <h3>Prototype Version</h3>
   </div>
 
-<div class="panel panel-warning">
+  <div class="panel panel-warning">
     <div class="panel-heading">
       <h3 class="panel-title">Note: This is a prototype version and provides access to a limited subset of data.</h3>
     </div>
@@ -66,12 +66,12 @@
 
   <h1>DataCite Search</h1>
 
-<!-- no action, self submit -->
+  <!-- no action, self submit -->
   <form name="simpleQueryForm" id="simpleQueryForm" class="form-inline"  method="GET">
         <div class="form-group">
             <label class="sr-only" for="freetext">Search</label>
 
-            <input type="text" name="freetext" id="freetext" size="32" class="form-control">
+            <input type="text" name="freetext" id="freetext" size="60" class="form-control">
 
             <button class="btn btn-success" id="submitButton">Search</button> 
 
@@ -120,12 +120,12 @@
                         <td>containing <em>glacier</em> in metadata field <em>description</em></td>
                       </tr>
                       <tr>
-                        <td><code>ResourceTypeGeneral:Software</code></td>
+                        <td><code>resourceTypeGeneral:Software</code></td>
                         <td>containing <em>Software</em> in <em>Resource Type</em></td>
                       </tr>
                       <tr>
-                        <td><code>allocator:(BL OR TIB)</code></td>
-                        <td>belonging to DataCite members <a href="http://datacite.org/britishlibrary">BL</a> or <a href="http://datacite.org/TIB">TIB</a></td>
+                        <td><code>creator:(Randel OR Nunes)</code></td>
+                        <td>created by <a href="http://datacite.org/britishlibrary">BL</a> or <a href="http://datacite.org/TIB">TIB</a></td>
                       </tr>
                       <tr>
                         <td><code>publicationYear:[2000 TO 2005]</code></td>
@@ -148,34 +148,34 @@
         </div>
   </form>
 
-<br>
+  <br>
 
     <!-- Results populated by jQuery -->
-    <div id="datablock">
+  <div id="datablock">
 
-      <div id="numFoundWell" class="well">
-        <div id="numFound">
-           <!--numFound text put here -->   
-        </div>
+    <div id="numFoundWell" class="well">
+      <div id="numFound">
+         <!--numFound text put here -->   
       </div>
+    </div>
 
-      <div class="row">
-        <div class="col-sm-3">
-      
-          <div id="displayFacetResults">
-               <!-- Facet results put here -->
-           </div>
-
+    <div class="row">
+      <div class="col-sm-3">
+    
+        <div id="displayFacetResults">
+             <!-- Facet results put here -->
         </div>
-        <div class="col-sm-9">
-          <div id="displayResults">
-               <!-- Query results put here -->
-           </div> 
 
-        </div>
       </div>
+      <div class="col-sm-9">
+        <div id="displayResults">
+             <!-- Query results put here -->
+        </div> 
+
+      </div>
+    </div>
       
-    </div> <!-- datablock -->    
+  </div> <!-- datablock -->    
 
 </main>
 
@@ -186,7 +186,7 @@
       <p>The National Center for Atmospheric Research is sponsored by the National Science Foundation. Any opinions, findings and conclusions or recommendations expressed in this publication are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.</p></div>
 </footer>
 
-
+<!--  ---------------------SCRIPTS--------------------- -->
 <script>
 
 function queryDatacite(numberOfRows, searchtext) {
@@ -304,7 +304,7 @@ function queryDataciteFacets(numberOfRows, searchtext) {
   return data;
 }
 
-function updateDisplayFacetResults (facetFields) {
+function updateDisplayFacetResults (facetFields, searchtext) {
 
    //console.log("FACET FIELDS: " + JSON.stringify(facetFields));
 
@@ -317,29 +317,41 @@ function updateDisplayFacetResults (facetFields) {
 
   $.each(resources, function (i, value) {
    
-  // console.log("--i= " + i);
-  // console.log("--value= " + value);
+    // console.log("--i= " + i);
+    // console.log("--value= " + value);
+    var newFacet = false;
+    var facetName;
+    var facetCount = 4000;
 
-// Even numbered indexes are the facet names
-   if (i%2 == 0) {
-       var facetName = value;
-       console.log ("Value/facetName: " + facetName);
 
-        $('#displayFacetResults').append("<div><b>" + facetName + "<span></span></b></div");
-        
-   }
-   else {
-       var facetCount = value;
-       console.log ("facetCount: " + facetCount);
-       $("span").last().after(" (" + facetCount + ")");
+    // Even numbered indexes are the facet names
+    if (i%2 == 0) {
 
-       // $('#displayFacetResults').append(facetCount +  "</b></div>");
-         $('#displayFacetResults').append("<br>");
-   }
+      newFacet = true;
+      facetName = value;
+      //console.log ("Value/facetName: " + facetName);
+     }
+     else {
+       facetCount = value;
+       //console.log ("facetCount: " + facetCount);
+    }
+
+    // TODO: move this to a function that takes a hash map created from above
+    if ( newFacet === true) {
+
+      var facet_link = "<a href=index.html?freetext=resourceTypeGeneral:" + facetName +"+" +  searchtext +">" + facetName +"</a>";
       
-   // var facet_link = '<a href=http://dx.doi.org/' + doi + '>' + title + '</a>';  
+      console.log ("FACET_LINK: " + facet_link);
 
-  });           
+
+      $('#displayFacetResults').append("<div><b>" + facet_link + "<span></span></b></div");
+    }
+    else {
+      $("span").last().after(" (" + facetCount + ")");  // This mess has to happen to avoid the newline
+      $('#displayFacetResults').append("<br>");
+    }
+
+  });  //each         
 }   
 
 /* On page load, get the parameter from the url (nothing or text) and use that to set up the query to DataCite.
@@ -350,8 +362,8 @@ $(document).ready(function() {
 
   $("#numFoundWell").hide();
 
-// Hiding tempoorarily
-  $("#displayFacetResults").hide();
+  // Hiding tempoorarily
+   $("#displayFacetResults").hide();
 
     // get the form data from the param passed
     var searchtext = getParameterByName('freetext');
@@ -393,7 +405,9 @@ $(document).ready(function() {
         var facetFields = data.facet_counts.facet_fields;
         console.log(JSON.stringify(facetFields));   
                 
-        updateDisplayFacetResults (facetFields);
+        updateDisplayFacetResults (facetFields, searchtext);
+
+        
 
     });  //queryDataciteFacets   
          
