@@ -304,7 +304,7 @@ function queryDataciteFacets(numberOfRows, searchtext) {
   return data;
 }
 
-function updateDisplayFacetResults (facetFields, searchtext) {
+function updateDisplayFacetResults (facetFields, searchtext, numberOfRecordsFound) {
 
    //console.log("FACET FIELDS: " + JSON.stringify(facetFields));
 
@@ -321,7 +321,7 @@ function updateDisplayFacetResults (facetFields, searchtext) {
     // console.log("--value= " + value);
     var newFacet = false;
     var facetName;
-    var facetCount = 4000;
+    var facetCount = numberOfRecordsFound;
 
 
     // Even numbered indexes are the facet names
@@ -363,7 +363,7 @@ $(document).ready(function() {
   $("#numFoundWell").hide();
 
   // Hiding tempoorarily
-   $("#displayFacetResults").hide();
+  // $("#displayFacetResults").hide();
 
     // get the form data from the param passed
     var searchtext = getParameterByName('freetext');
@@ -399,16 +399,15 @@ $(document).ready(function() {
 
       console.log ("returned FACET data: " + JSON.stringify(data));
 
-        var facetList = data.facet_counts;
-        console.log(JSON.stringify(facetList)); 
+      var facetList = data.facet_counts;
+      console.log(JSON.stringify(facetList)); 
 
-        var facetFields = data.facet_counts.facet_fields;
-        console.log(JSON.stringify(facetFields));   
+      var facetFields = data.facet_counts.facet_fields;
+      console.log(JSON.stringify(facetFields));   
                 
-        updateDisplayFacetResults (facetFields, searchtext);
-
+      // Assuming no more than 100 facets
+      updateDisplayFacetResults (facetFields, searchtext, 100);
         
-
     });  //queryDataciteFacets   
          
 }); //ready
