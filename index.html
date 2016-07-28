@@ -304,7 +304,7 @@ function queryDataciteFacets(numberOfRows, searchtext) {
   return data;
 }
 
-function updateDisplayFacetResults (facetFields, searchtext, numberOfRecordsFound) {
+function updateDisplayFacetResults (facetFields, searchtext) {
 
    //console.log("FACET FIELDS: " + JSON.stringify(facetFields));
 
@@ -315,43 +315,45 @@ function updateDisplayFacetResults (facetFields, searchtext, numberOfRecordsFoun
 
   //console.log ("RESOURCES: " + JSON.stringify(resources));
 
+  var facetName;
+  var facetCount=0;
+  var facetMap = new Map();
+
   $.each(resources, function (i, value) {
    
     // console.log("--i= " + i);
     // console.log("--value= " + value);
-    var newFacet = false;
-    var facetName;
-    var facetCount = numberOfRecordsFound;
-
-
+   
     // Even numbered indexes are the facet names
     if (i%2 == 0) {
-
-      newFacet = true;
+     
       facetName = value;
-      //console.log ("Value/facetName: " + facetName);
+      console.log ("Value/facetName: " + facetName);
+      facetMap.set(facetName,0);
+
      }
      else {
        facetCount = value;
        //console.log ("facetCount: " + facetCount);
-    }
+       facetMap.set(facetName,facetCount);
+    }   
 
-    // TODO: move this to a function that takes a hash map created from above
-    if ( newFacet === true) {
+  });  //each  
 
-      var facet_link = "<a href=index.html?freetext=resourceTypeGeneral:" + facetName +"+" +  searchtext +">" + facetName +"</a>";
-      
-      console.log ("FACET_LINK: " + facet_link);
+  // Iterate map
+  for (var [key, value] of facetMap) {
+    console.log(key + " = " + value);
 
+    var name = key;
+    var count = value;
 
-      $('#displayFacetResults').append("<div><b>" + facet_link + "<span></span></b></div");
-    }
-    else {
-      $("span").last().after(" (" + facetCount + ")");  // This mess has to happen to avoid the newline
-      $('#displayFacetResults').append("<br>");
-    }
+    var facet_link = "<a href=index.html?freetext=resourceTypeGeneral:" + name +"+" +  searchtext +">" + name + " (" + count + ")</a>";
+    console.log ("FACET_LINK: " + facet_link);
 
-  });  //each         
+    $('#displayFacetResults').append("<div style='padding: 5px;'><b>" + facet_link + "</b></div>");
+
+  }
+    
 }   
 
 /* On page load, get the parameter from the url (nothing or text) and use that to set up the query to DataCite.
